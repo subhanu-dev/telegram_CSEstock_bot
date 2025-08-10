@@ -1,0 +1,376 @@
+{
+  "name": "Telegram Stock bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        -192
+      ],
+      "id": "0595e955-7f30-4d2f-9fd6-8b99496f6cb9",
+      "name": "Telegram Trigger",
+      "webhookId": "15bebc0d-45a6-44da-9f80-ce2a2fa7b734",
+      "credentials": {
+        "telegramApi": {
+          "id": "VLFfCwjrVMUvW2Pj",
+          "name": "stock bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        -208
+      ],
+      "id": "8329d728-ad5a-46c2-8284-259c63a7d007",
+      "name": "Send a text message",
+      "webhookId": "7ad1ba3b-5996-44ee-9b17-8b5aeb94538e",
+      "credentials": {
+        "telegramApi": {
+          "id": "VLFfCwjrVMUvW2Pj",
+          "name": "stock bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }} or \n{{ $json.chatInput }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=You are a helpful assistant that is specialized in sri lankan stock market and finances. give advice on investing, stock market and financial management. \n\nDo not send the thinking results and keep the outputs limited to 300 words maximum, I do not need anything between <think> </think> as the output\n\nuse the http tools to get data.\n\ntoday is {{ $now }}\n\nkeep responses limited to 200 words max. give simple text based responses without formatting such as bolding headers, italics or table formatting. You can use emojis in your responses. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        -144
+      ],
+      "id": "9df5886d-43e3-4d86-b2ca-861cb27ee75d",
+      "name": "Stock Bot Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "fetches ASPI(All share price index) data ",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/aspiData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        112
+      ],
+      "id": "d517bd02-cd03-4128-9b18-eddc6e4853f9",
+      "name": "ASPI Data"
+    },
+    {
+      "parameters": {
+        "toolDescription": "call this to fetch top gainers ",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/topGainers",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        -320
+      ],
+      "id": "0f4724d0-655d-451d-ba94-ae551271b85e",
+      "name": "top gainers"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetches top losing stocks for the day",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/topLooses",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        64
+      ],
+      "id": "80f9b3c3-451e-4a68-9265-3b7296fec478",
+      "name": "Top Losers"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetches market summary data",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/marketSummery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        304,
+        -304
+      ],
+      "id": "b5d90d3f-ef98-41c4-ac10-7ff1d85f1464",
+      "name": "Market Summary"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetches S and P Sl 20 data",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/snpData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        128
+      ],
+      "id": "302b3623-0479-48ab-bcfe-079bd663490c",
+      "name": "SL 20"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetches most active trades data",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/mostActiveTrades",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        -96
+      ],
+      "id": "ac280031-bb0d-4b47-ab61-d56248e1dbaa",
+      "name": "Most active trades"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetch all sector data and their performance during the trading day. fetches trade volumes, turnover , percentage changes etc. for each of 20 GICS indices",
+        "method": "POST",
+        "url": "https://www.cse.lk/api/allSectors",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        112
+      ],
+      "id": "2b3fd903-d8eb-4759-9bad-1d5d3f040f09",
+      "name": "Sector data"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        48
+      ],
+      "id": "f3beb59c-7795-43aa-86b9-e6d43d2964f1",
+      "name": "GPT OSS 120b",
+      "credentials": {
+        "groqApi": {
+          "id": "lq4rHly1CuCpublw",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "mistralai/mistral-small-3.1-24b-instruct:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        48
+      ],
+      "id": "f6306cbf-25fb-413c-9374-00fa52af632c",
+      "name": "Mixtral Small 3.1 24b - Openrouter",
+      "credentials": {
+        "openRouterApi": {
+          "id": "cigCUq4RFsl0a9AJ",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Telegram Bot Specialized in Colombo Stock Exchange\n\nGain access to realtime updated info on CSE and get financial knowledge through an AI specialized in financial markets.",
+        "height": 752,
+        "width": 1280,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -448
+      ],
+      "id": "7c00f70d-9feb-4389-94d2-8d3e6238fc19",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stock Bot Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ASPI Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "top gainers": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Top Losers": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Market Summary": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SL 20": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Most active trades": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sector data": {
+      "ai_tool": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT OSS 120b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mixtral Small 3.1 24b - Openrouter": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Stock Bot Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a8171848-bac3-49a2-a4bf-8b8fc36a0b55",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "57a2bf6a058ec1c9fdbdbcd4395c82edff19ddc2b7875888c795821b34198274"
+  },
+  "id": "wHuZ3RpS7BKwccQJ",
+  "tags": []
+}
