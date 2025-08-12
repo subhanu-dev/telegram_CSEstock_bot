@@ -4,7 +4,8 @@ Powered by AI, this bot delivers near real-time market updates, in-depth summari
 
 📌 **Try it here:** [https://t.me/stocklk_bot](https://t.me/stocklk_bot)
 
-[demoimg](images/demo.jpeg)
+<img src="images/demo.jpeg" alt="demoimg" width="450"/>
+
 
 ## Features
 - ⚡ **Real-Time Data & AI Insights** – Make smarter investment choices with up-to-date market data.
