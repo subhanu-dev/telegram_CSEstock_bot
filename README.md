@@ -17,7 +17,7 @@ Powered by AI, this bot delivers near real-time market updates, in-depth summari
 ## Why Use It?
 - Supercharge your portfolio with data-driven decisions.
 - Expand your investing knowledge while staying on top of market changes.
-- Accessible to everyone — **completely free**.
+- Accessible to everyone , **completely free**.
 
 
 ## Tech Stack
